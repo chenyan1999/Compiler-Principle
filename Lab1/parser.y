@@ -141,7 +141,7 @@ Exp:        Exp ASSIGNOP Exp {$$=mknode(2,ASSIGNOP,yylineno,$1,$3);strcpy($$->ty
             | VarDec SELFDIV Exp {$$=mknode(2,SELFDIV,yylineno,$1,$3);strcpy($$->type_id,"SELFDIV");}
             | BREAK         {$$=mknode(0,BREAK,yylineno);strcpy($$->type_id,"BREAK");}
             | CONTINUE      {$$=mknode(0,CONTINUE,yylineno);strcpy($$->type_id,"CONTINUE");}
-            | Exp DOT ID    {$$=mknode(2,STRUCT_VISIT,yylineno,$1,$3);$$->ptr[1]=mknode(0,ID,yylineno);strcpy($$->ptr[1]->type_id,$3);}
+            | Exp DOT ID    {$$=mknode(1,STRUCT_VISIT,yylineno,$1);strcpy($$->type_id,$3);}
             // | SWITCH LP Exp RP LC CaseStmtList RC {$$=mknode(2,SWITCH,yylineno,$3,$6);strcpy($$->type_id,"SWITCH");}
             ;
 // CaseStmtList0: LC CaseStmtList RC {$$=mknode(1,CASE_STMT_LIST0,yylineno,$2);}
@@ -155,7 +155,7 @@ Args:       Exp COMMA Args    {$$=mknode(2,ARGS,yylineno,$1,$3);}
             ;
 StructSpecifier:
             STRUCT StructName LC ExtDefList RC {$$=mknode(2,STRUCT_DEF,yylineno,$2,$4);}
-            | STRUCT ID {$$=mknode(1,ID,yylineno,$2);strcpy($$->type_id,$2);}
+            | STRUCT ID {$$=mknode(1,STRUCT_DEF,yylineno,$2);strcpy($$->type_id,$2);$$->ptr[0]=NULL;}
             ;
 StructName: ID {$$=mknode(1,ID,yylineno,$1);strcpy($$->type_id,$1);}
             | {$$ = NULL;}

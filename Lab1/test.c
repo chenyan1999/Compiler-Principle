@@ -3,8 +3,8 @@ float m, n;
 char y;
 struct ThisIsStruct{
     int num;
-    int f;
-    int c;
+    float f;
+    char c;
 } astruct;
 int X[5][10];
 struct ThisIsStruct bstruct;

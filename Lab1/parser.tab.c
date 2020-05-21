@@ -2098,7 +2098,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 144 "parser.y"
-    {(yyval.ptr)=mknode(2,STRUCT_VISIT,yylineno,(yyvsp[(1) - (3)].ptr),(yyvsp[(3) - (3)].type_id));(yyval.ptr)->ptr[1]=mknode(0,ID,yylineno);strcpy((yyval.ptr)->ptr[1]->type_id,(yyvsp[(3) - (3)].type_id));;}
+    {(yyval.ptr)=mknode(1,STRUCT_VISIT,yylineno,(yyvsp[(1) - (3)].ptr));strcpy((yyval.ptr)->type_id,(yyvsp[(3) - (3)].type_id));;}
     break;
 
   case 65:
@@ -2126,7 +2126,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 158 "parser.y"
-    {(yyval.ptr)=mknode(1,ID,yylineno,(yyvsp[(2) - (2)].type_id));strcpy((yyval.ptr)->type_id,(yyvsp[(2) - (2)].type_id));;}
+    {(yyval.ptr)=mknode(1,STRUCT_DEF,yylineno,(yyvsp[(2) - (2)].type_id));strcpy((yyval.ptr)->type_id,(yyvsp[(2) - (2)].type_id));(yyval.ptr)->ptr[0]=NULL;;}
     break;
 
   case 69:
