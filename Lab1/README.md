@@ -22,7 +22,7 @@
 
 1. 增加了非终结符的语义值类型：StructSpecifier和StructName
 2. 增加了终结符的语义类型：CHAR、FOR、COLON 、BREAK、CONTINUE、DOT
-3. 增加了AST的节点类型：ARRAY、STRUCT、INC、DEC、SELFPLUS、SLEFMINUS、SELFSTAR、SELFDIV、VARIABLE、STRUCT_TYPE、STRUCT_DEF 和 STRUCT_VISIT
+3. 增加了AST的节点类型：ARRAY、STRUCT、INC、DEC、SELFPLUS、SLEFMINUS、SELFSTAR、SELFDIV、STRUCT_TYPE、STRUCT_DEF 和 STRUCT_VISIT
 
 4. 新增了文法如下：
 
@@ -33,12 +33,13 @@
     3. Stmt $\to \space \cdots |$ FOR LP Exp SEMI Exp SEMI Exp RP Stmt
 
     4. Exp $\to \space \cdots$ | VarDec | CHAR | Exp INC | Exp DEC | INC Exp | DEC Exp | VarDec SELFPLUS Exp | VarDec SELFMINUS Exp |  VarDec SELFSTAR Exp |  VarDec SELFDIV Exp | BREAK | CONTINUE | Exp DOT ID 
-       * 将Exp $\to$ ID 和新增的Exp $\to$ Exp LB Exp RB合并为Exp $\to$ VarDec
-
-    1. StructSpecifier $\to$ STRUCT StructName LC ExtDefList RC | STRUCT ID
-
-    2. StructName $\to$ ID| $\epsilon$
-
+       
+* 将Exp $\to$ ID 和新增的Exp $\to$ Exp LB Exp RB合并为Exp $\to$ VarDec
+       
+1. StructSpecifier $\to$ STRUCT StructName LC ExtDefList RC | STRUCT ID
+    
+2. StructName $\to$ ID| $\epsilon$
+    
         
 
 ## ast.c的新增内容
