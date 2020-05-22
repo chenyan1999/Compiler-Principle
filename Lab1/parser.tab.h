@@ -110,12 +110,11 @@
      SELFMINUS = 326,
      SELFSTAR = 327,
      SELFDIV = 328,
-     VARIABLE = 329,
-     STRUCT_DEF = 330,
-     STRUCT_TYPE = 331,
-     STRUCT_VISIT = 332,
-     UMINUS = 333,
-     LOWER_THEN_ELSE = 334
+     STRUCT_DEF = 329,
+     STRUCT_TYPE = 330,
+     STRUCT_VISIT = 331,
+     UMINUS = 332,
+     LOWER_THEN_ELSE = 333
    };
 #endif
 
@@ -137,7 +136,7 @@ typedef union YYSTYPE
 
 
 /* Line 1740 of yacc.c  */
-#line 141 "parser.tab.h"
+#line 140 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

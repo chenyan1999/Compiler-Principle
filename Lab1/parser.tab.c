@@ -181,12 +181,11 @@ extern struct ASTNode * mknode(int num,int kind,int pos,...);
      SELFMINUS = 326,
      SELFSTAR = 327,
      SELFDIV = 328,
-     VARIABLE = 329,
-     STRUCT_DEF = 330,
-     STRUCT_TYPE = 331,
-     STRUCT_VISIT = 332,
-     UMINUS = 333,
-     LOWER_THEN_ELSE = 334
+     STRUCT_DEF = 329,
+     STRUCT_TYPE = 330,
+     STRUCT_VISIT = 331,
+     UMINUS = 332,
+     LOWER_THEN_ELSE = 333
    };
 #endif
 
@@ -208,7 +207,7 @@ typedef union YYSTYPE
 
 
 /* Line 222 of yacc.c  */
-#line 212 "parser.tab.c"
+#line 211 "parser.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -233,7 +232,7 @@ typedef struct YYLTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 237 "parser.tab.c"
+#line 236 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -453,7 +452,7 @@ union yyalloc
 #define YYLAST   458
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  80
+#define YYNTOKENS  79
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  21
 /* YYNRULES -- Number of rules.  */
@@ -463,7 +462,7 @@ union yyalloc
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   334
+#define YYMAXUTOK   333
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -504,7 +503,7 @@ static const yytype_uint8 yytranslate[] =
       45,    46,    47,    48,    49,    50,    51,    52,    53,    54,
       55,    56,    57,    58,    59,    60,    61,    62,    63,    64,
       65,    66,    67,    68,    69,    70,    71,    72,    73,    74,
-      75,    76,    77,    78,    79
+      75,    76,    77,    78
 };
 
 #if YYDEBUG
@@ -525,30 +524,30 @@ static const yytype_uint8 yyprhs[] =
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-      81,     0,    -1,    82,    -1,    -1,    83,    82,    -1,    84,
-      85,    15,    -1,    84,    87,    90,    -1,     1,    15,    -1,
-       6,    -1,    99,    -1,    86,    -1,    86,    16,    85,    -1,
-       4,    -1,    86,    11,    97,    12,    -1,     4,     9,    88,
-      10,    -1,     4,     9,    10,    -1,    89,    -1,    89,    16,
-      88,    -1,    84,    86,    -1,    13,    93,    91,    14,    -1,
-      -1,    92,    91,    -1,    97,    15,    -1,    90,    -1,    28,
-      97,    15,    -1,    25,     9,    97,    10,    92,    -1,    25,
-       9,    97,    10,    92,    26,    92,    -1,    27,     9,    97,
-      10,    92,    -1,    29,     9,    97,    15,    97,    15,    97,
-      10,    92,    -1,    -1,    94,    93,    -1,     1,    15,    -1,
-      84,    95,    15,    -1,    96,    -1,    96,    16,    95,    -1,
-      86,    -1,    86,    21,    97,    -1,    97,    21,    97,    -1,
-      97,    22,    97,    -1,    97,    23,    97,    -1,    97,     5,
-      97,    -1,    97,    17,    97,    -1,    97,    18,    97,    -1,
-      97,    19,    97,    -1,    97,    20,    97,    -1,     9,    97,
-      10,    -1,    18,    97,    -1,    24,    97,    -1,     4,     9,
-      98,    10,    -1,     4,     9,    10,    -1,    86,    -1,     3,
-      -1,     7,    -1,     8,    -1,    97,    68,    -1,    97,    69,
-      -1,    68,    97,    -1,    69,    97,    -1,    86,    70,    97,
-      -1,    86,    71,    97,    -1,    86,    72,    97,    -1,    86,
-      73,    97,    -1,    30,    -1,    31,    -1,    97,    32,     4,
-      -1,    97,    16,    98,    -1,    97,    -1,    67,   100,    13,
-      82,    14,    -1,    67,     4,    -1,     4,    -1,    -1
+      80,     0,    -1,    81,    -1,    -1,    82,    81,    -1,    83,
+      84,    15,    -1,    83,    86,    89,    -1,     1,    15,    -1,
+       6,    -1,    98,    -1,    85,    -1,    85,    16,    84,    -1,
+       4,    -1,    85,    11,    96,    12,    -1,     4,     9,    87,
+      10,    -1,     4,     9,    10,    -1,    88,    -1,    88,    16,
+      87,    -1,    83,    85,    -1,    13,    92,    90,    14,    -1,
+      -1,    91,    90,    -1,    96,    15,    -1,    89,    -1,    28,
+      96,    15,    -1,    25,     9,    96,    10,    91,    -1,    25,
+       9,    96,    10,    91,    26,    91,    -1,    27,     9,    96,
+      10,    91,    -1,    29,     9,    96,    15,    96,    15,    96,
+      10,    91,    -1,    -1,    93,    92,    -1,     1,    15,    -1,
+      83,    94,    15,    -1,    95,    -1,    95,    16,    94,    -1,
+      85,    -1,    85,    21,    96,    -1,    96,    21,    96,    -1,
+      96,    22,    96,    -1,    96,    23,    96,    -1,    96,     5,
+      96,    -1,    96,    17,    96,    -1,    96,    18,    96,    -1,
+      96,    19,    96,    -1,    96,    20,    96,    -1,     9,    96,
+      10,    -1,    18,    96,    -1,    24,    96,    -1,     4,     9,
+      97,    10,    -1,     4,     9,    10,    -1,    85,    -1,     3,
+      -1,     7,    -1,     8,    -1,    96,    68,    -1,    96,    69,
+      -1,    68,    96,    -1,    69,    96,    -1,    85,    70,    96,
+      -1,    85,    71,    96,    -1,    85,    72,    96,    -1,    85,
+      73,    96,    -1,    30,    -1,    31,    -1,    96,    32,     4,
+      -1,    96,    16,    97,    -1,    96,    -1,    67,    99,    13,
+      81,    14,    -1,    67,     4,    -1,     4,    -1,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
@@ -580,11 +579,11 @@ static const char *const yytname[] =
   "IF_THEN_ELSE", "FUNC_CALL", "ARGS", "FUNCTION", "PARAM", "ARG", "CALL",
   "LABEL", "GOTO", "JLT", "JLE", "JGT", "JGE", "EQ", "NEQ", "ARRAY",
   "STRUCT", "INC", "DEC", "SELFPLUS", "SELFMINUS", "SELFSTAR", "SELFDIV",
-  "VARIABLE", "STRUCT_DEF", "STRUCT_TYPE", "STRUCT_VISIT", "UMINUS",
-  "LOWER_THEN_ELSE", "$accept", "program", "ExtDefList", "ExtDef",
-  "Specifier", "ExtDecList", "VarDec", "FuncDec", "VarList", "ParamDec",
-  "CompSt", "StmList", "Stmt", "DefList", "Def", "DecList", "Dec", "Exp",
-  "Args", "StructSpecifier", "StructName", 0
+  "STRUCT_DEF", "STRUCT_TYPE", "STRUCT_VISIT", "UMINUS", "LOWER_THEN_ELSE",
+  "$accept", "program", "ExtDefList", "ExtDef", "Specifier", "ExtDecList",
+  "VarDec", "FuncDec", "VarList", "ParamDec", "CompSt", "StmList", "Stmt",
+  "DefList", "Def", "DecList", "Dec", "Exp", "Args", "StructSpecifier",
+  "StructName", 0
 };
 #endif
 
@@ -600,21 +599,21 @@ static const yytype_uint16 yytoknum[] =
      295,   296,   297,   298,   299,   300,   301,   302,   303,   304,
      305,   306,   307,   308,   309,   310,   311,   312,   313,   314,
      315,   316,   317,   318,   319,   320,   321,   322,   323,   324,
-     325,   326,   327,   328,   329,   330,   331,   332,   333,   334
+     325,   326,   327,   328,   329,   330,   331,   332,   333
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    80,    81,    82,    82,    83,    83,    83,    84,    84,
-      85,    85,    86,    86,    87,    87,    88,    88,    89,    90,
-      91,    91,    92,    92,    92,    92,    92,    92,    92,    93,
-      93,    93,    94,    95,    95,    96,    96,    97,    97,    97,
-      97,    97,    97,    97,    97,    97,    97,    97,    97,    97,
-      97,    97,    97,    97,    97,    97,    97,    97,    97,    97,
-      97,    97,    97,    97,    97,    98,    98,    99,    99,   100,
-     100
+       0,    79,    80,    81,    81,    82,    82,    82,    83,    83,
+      84,    84,    85,    85,    86,    86,    87,    87,    88,    89,
+      90,    90,    91,    91,    91,    91,    91,    91,    91,    92,
+      92,    92,    93,    94,    94,    95,    95,    96,    96,    96,
+      96,    96,    96,    96,    96,    96,    96,    96,    96,    96,
+      96,    96,    96,    96,    96,    96,    96,    96,    96,    96,
+      96,    96,    96,    96,    96,    97,    97,    98,    98,    99,
+      99
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -797,20 +796,20 @@ static const yytype_int16 yycheck[] =
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     1,     6,    67,    81,    82,    83,    84,    99,    15,
-       4,   100,     0,    82,     4,    85,    86,    87,    13,     9,
-      15,    11,    16,    13,    90,    82,    10,    84,    88,    89,
+       0,     1,     6,    67,    80,    81,    82,    83,    98,    15,
+       4,    99,     0,    81,     4,    84,    85,    86,    13,     9,
+      15,    11,    16,    13,    89,    81,    10,    83,    87,    88,
        3,     4,     7,     8,     9,    18,    24,    30,    31,    68,
-      69,    86,    97,     4,    85,     1,    84,    93,    94,    14,
-      86,    10,    16,     9,    97,    97,    97,    97,    97,    70,
+      69,    85,    96,     4,    84,     1,    83,    92,    93,    14,
+      85,    10,    16,     9,    96,    96,    96,    96,    96,    70,
       71,    72,    73,     5,    12,    17,    18,    19,    20,    21,
-      22,    23,    32,    68,    69,    15,    86,    95,    96,    25,
-      27,    28,    29,    90,    91,    92,    97,    93,    88,    10,
-      97,    98,    10,    97,    97,    97,    97,    97,    97,    97,
-      97,    97,    97,    97,    97,     4,    21,    15,    16,     9,
-       9,    97,     9,    14,    91,    15,    16,    10,    97,    95,
-      97,    97,    15,    97,    98,    10,    10,    15,    92,    92,
-      97,    26,    15,    92,    97,    10,    92
+      22,    23,    32,    68,    69,    15,    85,    94,    95,    25,
+      27,    28,    29,    89,    90,    91,    96,    92,    87,    10,
+      96,    97,    10,    96,    96,    96,    96,    96,    96,    96,
+      96,    96,    96,    96,    96,     4,    21,    15,    16,     9,
+       9,    96,     9,    14,    90,    15,    16,    10,    96,    94,
+      96,    96,    15,    96,    97,    10,    10,    15,    91,    91,
+      96,    26,    15,    91,    96,    10,    91
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -2000,7 +1999,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 130 "parser.y"
-    {(yyval.ptr)=mknode(1,VARIABLE,yylineno, (yyvsp[(1) - (1)].ptr));;}
+    {(yyval.ptr)=(yyvsp[(1) - (1)].ptr);;}
     break;
 
   case 51:
@@ -2146,7 +2145,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 2150 "parser.tab.c"
+#line 2149 "parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);

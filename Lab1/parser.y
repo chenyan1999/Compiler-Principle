@@ -37,7 +37,7 @@ extern struct ASTNode * mknode(int num,int kind,int pos,...);
 /*以下为接在上述token后依次编码的枚举常量，作为AST结点类型标记*/
 %token EXT_DEF_LIST EXT_VAR_DEF FUNC_DEF FUNC_DEC EXT_DEC_LIST PARAM_LIST PARAM_DEC VAR_DEF DEC_LIST DEF_LIST COMP_STM STM_LIST EXP_STMT IF_THEN IF_THEN_ELSE
 %token FUNC_CALL ARGS FUNCTION PARAM ARG CALL LABEL GOTO JLT JLE JGT JGE EQ NEQ
-%token ARRAY STRUCT INC DEC SELFPLUS SELFMINUS SELFSTAR SELFDIV VARIABLE STRUCT_DEF STRUCT_TYPE STRUCT_VISIT
+%token ARRAY STRUCT INC DEC SELFPLUS SELFMINUS SELFSTAR SELFDIV STRUCT_DEF STRUCT_TYPE STRUCT_VISIT
 // %token CASE_STMT_LIST CASE_STMT_LIST0 /*未使用到的节点类型*/
 
 %left INT FLOAT ID
@@ -127,7 +127,7 @@ Exp:        Exp ASSIGNOP Exp {$$=mknode(2,ASSIGNOP,yylineno,$1,$3);strcpy($$->ty
             | ID LP RP      {$$=mknode(0,FUNC_CALL,yylineno);strcpy($$->type_id,$1);}
             // | Exp LB Exp RB {$$=mknode(2, ARRAY, yylineno, $1, $3); strcpy($$->type_id,"ARRAY");} //数组
             // | ID            {$$=mknode(0,ID,yylineno);strcpy($$->type_id,$1);}
-            | VarDec        {$$=mknode(1,VARIABLE,yylineno, $1);}//数组或变量
+            | VarDec        {$$=$1;}//数组或变量
             | INT           {$$=mknode(0,INT,yylineno);$$->type_int=$1;$$->type=INT;}
             | FLOAT         {$$=mknode(0,FLOAT,yylineno);$$->type_float=$1;$$->type=FLOAT;}
             | CHAR          {$$=mknode(0,CHAR,yylineno);$$->type_char=$1;$$->type=CHAR;}

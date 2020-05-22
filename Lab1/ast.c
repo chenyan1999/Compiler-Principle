@@ -37,7 +37,6 @@ void semantic_Analysis(struct ASTNode *T){
         case STRUCT_DEF:if(!T->ptr[1]){
                             printf("(%s, ID)\n", T->type_id);
                         }
-                        
                         break;
         case STRUCT_VISIT:
                         printf("(%s, ID)\n", T->type_id);
@@ -210,8 +209,6 @@ void display(struct ASTNode *T,int indent)
                         display(T->ptr[0],indent+3);
                         display(T->ptr[1],indent+3);
                         break;
-    case VARIABLE:      display(T->ptr[0],indent);
-                        break;
     case BREAK:         printf("%*c%s\n",indent,' ',T->type_id);
                         break;
     case CONTINUE:      printf("%*c%s\n",indent,' ',T->type_id);
@@ -242,9 +239,6 @@ void display(struct ASTNode *T,int indent)
                         }
                         break;
     case STRUCT_VISIT:  T0 = T->ptr[0];
-                        if (T0->kind == VARIABLE) {
-                            T0 = T0->ptr[0];
-                        }
                         printf("%*c结构名：%s\n",indent,' ',T0->type_id);
                         printf("%*c结构内变量名：%s\n", indent, ' ',T->type_id);
                         break;
