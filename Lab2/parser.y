@@ -37,7 +37,7 @@ extern struct ASTNode * mknode(int num,int kind,int pos,...);
 /*以下为接在上述token后依次编码的枚举常量，作为AST结点类型标记*/
 %token EXT_DEF_LIST EXT_VAR_DEF FUNC_DEF FUNC_DEC EXT_DEC_LIST PARAM_LIST PARAM_DEC VAR_DEF DEC_LIST DEF_LIST COMP_STM STM_LIST EXP_STMT IF_THEN IF_THEN_ELSE
 %token FUNC_CALL ARGS FUNCTION PARAM ARG CALL LABEL GOTO JLT JLE JGT JGE EQ NEQ
-%token ARRAY STRUCT INC DEC SELFPLUS SELFMINUS SELFSTAR SELFDIV VARIABLE STRUCT_DEF STRUCT_TYPE STRUCT_VISIT
+%token ARRAY STRUCT INC DEC SELFPLUS SELFMINUS SELFSTAR SELFDIV STRUCT_DEF STRUCT_TYPE STRUCT_VISIT
 // %token CASE_STMT_LIST CASE_STMT_LIST0 /*未使用到的节点类型*/
 
 %left INT FLOAT ID
@@ -57,7 +57,7 @@ extern struct ASTNode * mknode(int num,int kind,int pos,...);
 %nonassoc ELSE
 
 %%
-program:    ExtDefList   {display($1,0); semantic_Analysis0($1);}     //显示语法树,语义分析
+program:    ExtDefList   {semantic_Analysis0($1);}     //显示语法树,语义分析
             ;          
 ExtDefList: {$$=NULL;}
             | ExtDef ExtDefList   {$$=mknode(2,EXT_DEF_LIST,yylineno,$1,$2);}   //每一个EXTDEFLIST的结点，其第1棵子树对应一个外部变量声明或函数
@@ -127,7 +127,7 @@ Exp:        Exp ASSIGNOP Exp {$$=mknode(2,ASSIGNOP,yylineno,$1,$3);strcpy($$->ty
             | ID LP RP      {$$=mknode(0,FUNC_CALL,yylineno);strcpy($$->type_id,$1);}
             // | Exp LB Exp RB {$$=mknode(2, ARRAY, yylineno, $1, $3); strcpy($$->type_id,"ARRAY");} //数组
             // | ID            {$$=mknode(0,ID,yylineno);strcpy($$->type_id,$1);}
-            | VarDec        {$$=mknode(1,VARIABLE,yylineno, $1);}//数组或变量
+            | VarDec        {$$=$1;}//数组或变量
             | INT           {$$=mknode(0,INT,yylineno);$$->type_int=$1;$$->type=INT;}
             | FLOAT         {$$=mknode(0,FLOAT,yylineno);$$->type_float=$1;$$->type=FLOAT;}
             | CHAR          {$$=mknode(0,CHAR,yylineno);$$->type_char=$1;$$->type=CHAR;}
@@ -135,13 +135,13 @@ Exp:        Exp ASSIGNOP Exp {$$=mknode(2,ASSIGNOP,yylineno,$1,$3);strcpy($$->ty
             | Exp DEC       {$$=mknode(1,DEC,yylineno,$1);strcpy($$->type_id,"DEC");}
             | INC Exp       {$$=mknode(1,INC,yylineno,$2);strcpy($$->type_id,"INC");}
             | DEC Exp       {$$=mknode(1,DEC,yylineno,$2);strcpy($$->type_id,"DEC");}
-            | VarDec SELFPLUS Exp  {$$=mknode(2,SELFPLUS,yylineno,$1,$3);strcpy($$->type_id,"SELFPLUS");}
-            | VarDec SELFMINUS Exp {$$=mknode(2,SELFMINUS,yylineno,$1,$3);strcpy($$->type_id,"SELFMINUS");}
-            | VarDec SELFSTAR Exp {$$=mknode(2,SELFSTAR,yylineno,$1,$3);strcpy($$->type_id,"SELFSTAR");}
-            | VarDec SELFDIV Exp {$$=mknode(2,SELFDIV,yylineno,$1,$3);strcpy($$->type_id,"SELFDIV");}
+            | Exp SELFPLUS Exp  {$$=mknode(2,SELFPLUS,yylineno,$1,$3);strcpy($$->type_id,"SELFPLUS");}
+            | Exp SELFMINUS Exp {$$=mknode(2,SELFMINUS,yylineno,$1,$3);strcpy($$->type_id,"SELFMINUS");}
+            | Exp SELFSTAR Exp {$$=mknode(2,SELFSTAR,yylineno,$1,$3);strcpy($$->type_id,"SELFSTAR");}
+            | Exp SELFDIV Exp {$$=mknode(2,SELFDIV,yylineno,$1,$3);strcpy($$->type_id,"SELFDIV");}
             | BREAK         {$$=mknode(0,BREAK,yylineno);strcpy($$->type_id,"BREAK");}
             | CONTINUE      {$$=mknode(0,CONTINUE,yylineno);strcpy($$->type_id,"CONTINUE");}
-            | Exp DOT ID    {$$=mknode(2,STRUCT_VISIT,yylineno,$1,$3);$$->ptr[1]=mknode(0,ID,yylineno);strcpy($$->ptr[1]->type_id,$3);}
+            | Exp DOT ID    {$$=mknode(1,STRUCT_VISIT,yylineno,$1);strcpy($$->type_id,$3);}
             // | SWITCH LP Exp RP LC CaseStmtList RC {$$=mknode(2,SWITCH,yylineno,$3,$6);strcpy($$->type_id,"SWITCH");}
             ;
 // CaseStmtList0: LC CaseStmtList RC {$$=mknode(1,CASE_STMT_LIST0,yylineno,$2);}
@@ -155,7 +155,7 @@ Args:       Exp COMMA Args    {$$=mknode(2,ARGS,yylineno,$1,$3);}
             ;
 StructSpecifier:
             STRUCT StructName LC ExtDefList RC {$$=mknode(2,STRUCT_DEF,yylineno,$2,$4);}
-            | STRUCT ID {$$=mknode(1,ID,yylineno,$2);strcpy($$->type_id,$2);}
+            | STRUCT ID {$$=mknode(1,STRUCT_DEF,yylineno,$2);strcpy($$->type_id,$2);$$->ptr[0]=NULL;}
             ;
 StructName: ID {$$=mknode(1,ID,yylineno,$1);strcpy($$->type_id,$1);}
             | {$$ = NULL;}

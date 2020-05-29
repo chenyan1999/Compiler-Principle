@@ -1,83 +1,50 @@
-# README about Lab 1
+# README about Lab 2
 
-## lex.l的新增内容
+## SymbolTable.c的新增内容
 
-1. 增加了对char类型的识别
+1. 增加了对**任意位置 Char 类型**的符号表添加
+2. 在函数 *ext_var_list()* 中增加了对 **外部定义数组** 的符号表添加
+3. 在函数 *semantic_Analysis()* 的 *case VAR_DEF* 中增加了对 **内部定义数组** 的符号表添加
+4. 在函数 *Exp()* 中增加了 *case ARRAY* ，以支持数组在基本表达式中的使用，但不支持对溢出、维数错误等问题的检测
+5. 在函数 *Exp()* 中添加了 *case INC, case DEC, case SELFPLUS, case SELFMINUS, case SELFMNUS, case SLEFSTAR, case SELFDIV* ，以支持新增的运算在基本表达式中的使用，其中对除了 *INC, DEC* 外的运算增加了两侧类型相同的检测。
+6. 在函数 *Exp()* 中补充了 *case NOT, case UMINUS*
+7. 在函数 *semantic_Analysis()* 中增加了 *case FOR*
+8. 支持对临时数偏移量的计算
+9. 未能实现结构类型的管理
 
-2. 增加了对for类型的识别
-
-3. 增加了对break和continue的识别
-
-4. 增加了对struct的识别
-
-5. 增加了对++、--、+=、-=、*=、/=的识别
-
-6. 增加了对//、/* */两种注释的识别
-
-7. 增加了对 : (冒号)、. (点)、[ (左中括号)、] (右中括号)的识别
-
-    
-
-## parser.y的新增内容
-
-1. 增加了非终结符的语义值类型：StructSpecifier和StructName
-2. 增加了终结符的语义类型：CHAR、FOR、COLON 、BREAK、CONTINUE、DOT
-3. 增加了AST的节点类型：ARRAY、STRUCT、INC、DEC、SELFPLUS、SLEFMINUS、SELFSTAR、SELFDIV、VARIABLE
-
-、STRUCT_TYPE、STRUCT_DEF和STRUCT_VISIT
-
-4. 新增了文法如下：
-
-    1. Specifier $\to \space \cdots | $  StructSpecifier
-
-    2. VarDec $\to \space \cdots | $ VarDec LB Exp RB
-
-    3. Stmt $\to \space \cdots | $ FOR LP Exp SEMI Exp SEMI Exp RP Stmt
-
-    4. Exp $\to \space \cdots | $ VarDec | CHAR | Exp INC | Exp DEC | INC Exp | DEC Exp | VarDec SELFPLUS Exp | VarDec SELFMINUS Exp |  VarDec SELFSTAR Exp |  VarDec SELFDIV Exp | BREAK | CONTINUE | Exp DOT ID (将Exp $\to$ ID 和新增的Exp $\to$ Exp LB Exp RB合并为Exp $\to$ VarDec)
-
-    5. StructSpecifier $\to $ STRUCT StructName LC ExtDefList RC | STRUCT ID
-
-    6. StructName $\to$ ID| $\epsilon$
-
-        
-
-## ast.c的新增内容
-
-1. 新增函数semantic_Analysis0、semantic_Analysis用于展示二元单词序列
-
-2. 在函数display的switch-case语句中新增：STRUCT_TYPE、FOR、CHAR、ARRAY、VARIABLE、BREAK、CONTINUE、STRUCT_DEF、STRUCT_VISIT、SELFPLUS、SELFMINUS的识别
-
-    
-
-## mini-c支持的内容
+## mini-c支持的内容（加粗内容为自定义内容）
 
 * 数据类型：
+  
     * int
     
     * float
     
-    * char
+    * **char**
     
-    * 任意维数的数组，支持数组内的表达式计算，如：
+    * **任意维数的数组**，在变量声明中只支持常量长度的定长数组，只在表达式中支持数组内的表达式计算，如：
     
         ```c
-        int x = 3;
-        int array[1+2][x];
+        int x[5][2];
+        int i = 2;
+        x[1][1] = x[1+2][i --];
         ```
     
-    * struct结构
+    * ~~**struct结构**~~
+    
 * 基本运算：
     * +、-、*、/
     * 比较运算
     * 逻辑运算
-    * ++、--
-    * +=、-=、*=、/=
+    * **++、--**
+    * **+=、-=、*=、/=**
+    
 * 控制语句：
     * if-else
     * while
-    * break、continue
-    * for
+    * **break、continue**
+    * **for**
+    
 * 其他：
     * 单行注释//
     * 多行注释/**/

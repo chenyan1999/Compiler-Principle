@@ -34,9 +34,13 @@ void semantic_Analysis(struct ASTNode *T){
                         }
                         printf("(%s, ARRAY)\n", T0->type_id);
                         return;
-        // case STRUCT_DEF:
-        //                 semantic_Analysis(T->ptr[1]);
-        //                 return;
+        case STRUCT_DEF:if(!T->ptr[1]){
+                            printf("(%s, ID)\n", T->type_id);
+                        }
+                        break;
+        case STRUCT_VISIT:
+                        printf("(%s, ID)\n", T->type_id);
+                        break;
         case FUNC_CALL:
         case FUNC_DEC:  printf("(%s, FUNC)\n", T->type_id);
                         break;
@@ -199,13 +203,11 @@ void display(struct ASTNode *T,int indent)
                         break;
 	case FLOAT:	        printf("%*cFLOAT：%f\n",indent,' ',T->type_float);
                         break;
-    case CHAR:	        printf("%*cCHAR：%c\n",indent,' ',T->type_char);
+    case CHAR:	        printf("%*cCHAR：\'%c'\'\n",indent,' ',T->type_char);
                         break;
     case ARRAY:         printf("%*c%s\n",indent,' ',T->type_id);
                         display(T->ptr[0],indent+3);
                         display(T->ptr[1],indent+3);
-                        break;
-    case VARIABLE:      display(T->ptr[0],indent);
                         break;
     case BREAK:         printf("%*c%s\n",indent,' ',T->type_id);
                         break;
@@ -227,19 +229,18 @@ void display(struct ASTNode *T,int indent)
     //                     printf("对应操作：\n");
     //                     display(T->ptr[1],indent+3);
     //                     break;
-    case STRUCT_DEF:    printf("%*c结构名：\n", indent, ' ');
-                        display(T->ptr[0], indent + 3);
-                        if(T->ptr[1]){
+    case STRUCT_DEF:    if (T->ptr[1]) {
+                            printf("%*c结构名：%s\n",indent,' ',T->ptr[0]->type_id);
                             printf("%*c结构定义：\n", indent, ' ');
                             display(T->ptr[1], indent + 3);
-                        }else{
+                        } else{
+                            printf("%*c结构名：%s\n",indent,' ',T->type_id);
                             printf("%*c结构定义：无\n", indent, ' ');
                         }
                         break;
-    case STRUCT_VISIT:  printf("%*c结构名：\n", indent, ' ');
-                        display(T->ptr[0], indent + 3);
-                        printf("%*c结构内变量名：\n", indent, ' ');
-                        display(T->ptr[1], indent + 3);
+    case STRUCT_VISIT:  T0 = T->ptr[0];
+                        printf("%*c结构名：%s\n",indent,' ',T0->type_id);
+                        printf("%*c结构内变量名：%s\n", indent, ' ',T->type_id);
                         break;
 	case ASSIGNOP:
 	case AND:
