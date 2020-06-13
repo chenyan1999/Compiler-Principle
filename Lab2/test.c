@@ -1,11 +1,11 @@
 //用于符号表测试
-int a, b, c;
-float m, n;
-int X[5][10];//array
-// int print(int a){
-//     int ax;
-//     return 1;
-// }
+// int a, b, c;
+// float m, n;
+// int X[5][10];//array
+// // int print(int a){
+// //     int ax;
+// //     return 1;
+// // }
 int fibo(int a) {
     int w,y[5][5], i;
     float cc[5][5][5],ff,aa;
@@ -18,29 +18,29 @@ int fibo(int a) {
         print(i);
     }
 }
-int main(){
-	int m, n, i;
-    char y;
-	m = read();
-	i = 1;
-	n = ++ X[0][2];
-    y = 'T';
-	for(i = 1; i <= m; i ++){//for
-		//Test this comment
-		n = fibo(i);
-		write(n);
-        if (i = 4){
-            break;//break
-        }else{
-            continue;//continue
-        }
-	}
-    /* while(i <= m){
-         n = fibo(i);
-	 	write(n);
-    }*/ 
-	return 1;
-}
+// int main(){
+// 	int m, n, i;
+//     char y;
+// 	m = read();
+// 	i = 1;
+// 	n = ++ X[0][2];
+//     y = 'T';
+// 	for(i = 1; i <= m; i ++){//for
+// 		//Test this comment
+// 		n = fibo(i);
+// 		write(n);
+//         if (i = 4){
+//             break;//break
+//         }else{
+//             continue;//continue
+//         }
+// 	}
+//     /* while(i <= m){
+//          n = fibo(i);
+// 	 	write(n);
+//     }*/ 
+// 	return 1;
+// }
 
 //以下用于静态语义检查
 // int a, b, c;
