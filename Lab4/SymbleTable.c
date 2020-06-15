@@ -249,18 +249,21 @@ void objectCode(struct codenode *head){
                             fprintf(fp,"lw $t2, %d($fp)\n",h->opn2.offset);//load constant
                             fprintf(fp,"add $t3, $t2,$t1\n");//add
                             fprintf(fp,"sw $t3, %d($fp)\n",h->opn1.offset);//store into v
+                            fprintf(fp,"sw $t3, %d($fp)\n",h->result.offset);//store into temp
                             break;
             case SELFMINUS: // v := v - #x
                             fprintf(fp,"lw $t1, %d($fp)\n",h->opn1.offset);//load v
                             fprintf(fp,"lw $t2, %d($fp)\n",h->opn2.offset);//load constant
                             fprintf(fp,"sub $t3, $t2,$t1\n");//sub
                             fprintf(fp,"sw $t3, %d($fp)\n",h->opn1.offset);//store into v
+                            fprintf(fp,"sw $t3, %d($fp)\n",h->result.offset);//store into temp
                             break;
             case SELFSTAR:  // v := v * #x
                             fprintf(fp,"lw $t1, %d($fp)\n",h->opn1.offset);//load v
                             fprintf(fp,"lw $t2, %d($fp)\n",h->opn2.offset);//load constant
                             fprintf(fp,"mul $t3, $t2,$t1\n");//multiple
                             fprintf(fp,"sw $t3, %d($fp)\n",h->opn1.offset);//store into v
+                            fprintf(fp,"sw $t3, %d($fp)\n",h->result.offset);//store into temp
                             break;
             case SELFDIV:   // v := v / #x
                             fprintf(fp,"lw $t1, %d($fp)\n",h->opn1.offset);//load v
@@ -268,6 +271,7 @@ void objectCode(struct codenode *head){
                             fprintf(fp,"div $t1,$t2\n");//div 
                             fprintf(fp,"mflo $t3\n");//div
                             fprintf(fp,"sw $t3, %d($fp)\n",h->opn1.offset);//store into v
+                            fprintf(fp,"sw $t3, %d($fp)\n",h->result.offset);//store into temp
                             break;
             case PLUS:      // t := vt + vt
                             fprintf(fp,"lw $t1, %d($fp)\n",h->opn1.offset);
@@ -392,7 +396,6 @@ void objectCode(struct codenode *head){
                                 ismain = 0;
                                 break;
                             }
-                            
                             // fprintf(fp,"-------\n");
                             if (h->result.kind)
                                 fprintf(fp,"lw $v0, %d($fp)#存返回值\n",h->result.offset);
@@ -406,6 +409,7 @@ void objectCode(struct codenode *head){
                             fprintf(fp,"move $fp, $t1#回到栈底\n");
                             //$sp取($sp) 回退
                             fprintf(fp,"lw $t1, -4($fp)\n");
+                            fprintf(fp,"add $t1, $fp,$t1\n");//new added
                             fprintf(fp,"move $sp, $t1\n");
                             //返回
                             fprintf(fp,"jr $ra\n");
@@ -936,9 +940,11 @@ void Exp(struct ASTNode *T){
                     T->code = merge(2,T->ptr[0]->code,T->ptr[1]->code);
                     opn1.kind = ID;   
                     strcpy(opn1.id,symbolTable.symbols[T->ptr[1]->place].alias);//右值一定是个变量或临时变量
+                    opn1.type = T->ptr[1]->type;
                     opn1.offset = symbolTable.symbols[T->ptr[1]->place].offset;
                     result.kind = ID; 
                     strcpy(result.id,symbolTable.symbols[T->ptr[0]->place].alias);
+                    result.type = T->ptr[0]->type;
                     result.offset = symbolTable.symbols[T->ptr[0]->place].offset;
                     T->code = merge(2,T->code,genIR(ASSIGNOP,opn1,opn2,result));
                 }
@@ -1108,14 +1114,18 @@ void Exp(struct ASTNode *T){
                 T->width = T->ptr[0]->width + T->ptr[1]->width;
                 if (T->ptr[0]->type == FLOAT && T->ptr[1]->type == FLOAT){
                     T->type = FLOAT;
+                    T->width += 8;//此处的增量是变量自增后暂存所需要的的width
                 }else if (T->ptr[0]->type == INT && T->ptr[1]->type == INT){
                     T->type = INT;
+                    T->width += 4;
                 }else if (T->ptr[0]->type == CHAR && T->ptr[1]->type == CHAR){
                     T->type = CHAR;
+                    T->width += 1;
                 }else {
                     semantic_error(T->pos,"", "运算符两端类型不匹配");
                     return;
                 }
+                T->place = fill_Temp(newTemp(),LEV,T -> type,'T',T->offset + T->ptr[0]->width + T->ptr[1]->width);
                 //opn1
                 opn1.kind = ID; 
                 strcpy(opn1.id,symbolTable.symbols[T->ptr[0]->place].alias);
@@ -1128,9 +1138,9 @@ void Exp(struct ASTNode *T){
                 opn2.offset = symbolTable.symbols[T->ptr[1]->place].offset;
                 //result
                 result.kind = ID; 
-                strcpy(result.id,symbolTable.symbols[T->ptr[0]->place].alias);
+                strcpy(result.id,symbolTable.symbols[T->place].alias);
                 result.type = T->type;
-                result.offset = symbolTable.symbols[T->ptr[0]->place].offset;
+                result.offset = symbolTable.symbols[T->place].offset;
                 T->code = merge(3,T->ptr[0]->code,T->ptr[1]->code,genIR(T->kind,opn1,opn2,result));
                 break;
 	case PLUS:
@@ -1178,12 +1188,15 @@ void Exp(struct ASTNode *T){
                 Exp(T->ptr[0]);
                 if (T->ptr[0]->type == FLOAT){
                     T->type = FLOAT;
+                    T->width = T->ptr[0]->width + 8;
                 }else if (T->ptr[0]->type == INT){
                     T->type = INT;
+                    T->width = T->ptr[0]->width + 4;
                 }else if (T->ptr[0]->type == CHAR){
                     T->type = CHAR;
+                    T->width = T->ptr[0]->width + 1;
                 }
-                T->width = T->ptr[0]->width;
+                T->place = fill_Temp(newTemp(),LEV,T->type,'T',T->offset + T->ptr[0]->width);
                 opn1.kind = ID; 
                 strcpy(opn1.id,symbolTable.symbols[T->ptr[0]->place].alias);
                 opn1.type = T->ptr[0]->type;
@@ -1192,7 +1205,11 @@ void Exp(struct ASTNode *T){
                 strcpy(result.id,symbolTable.symbols[T->ptr[0]->place].alias);
                 result.type = T->type;
                 result.offset = symbolTable.symbols[T->ptr[0]->place].offset;
-                T->code = merge(2,T->ptr[0]->code,genIR(T->kind,opn1,opn2,result));
+                result1.kind = ID;
+                strcpy(result1.id,symbolTable.symbols[T->place].alias);
+                result1.type = T->type;
+                result1.offset = symbolTable.symbols[T->place].offset;
+                T->code = merge(3,T->ptr[0]->code,genIR(T->kind,opn1,opn2,result),genIR(ASSIGNOP,opn1,opn2,result1));
                 break;
 	case NOT:   T->ptr[0]->offset = T->offset;
                 Exp(T->ptr[0]);
@@ -1596,7 +1613,7 @@ void semantic_Analysis(struct ASTNode *T){
                         }
                         T->width += width * totallength;
                     }else if (T0->ptr[0]->kind == ASSIGNOP){//变量声明的同时赋值
-                        if(T1->ptr[0]->kind == ARRAY){
+                        if(T1->ptr[0]->kind == ARRAY){//here
                             semantic_error(T1->ptr[0]->pos," ", "禁止对数组赋值");
                         }
                         rtn = fillSymbolTable(T1->ptr[0]->type_id,newAlias(),LEV,T1->type,'V',T->offset+T->width);
@@ -1610,8 +1627,10 @@ void semantic_Analysis(struct ASTNode *T){
                             Exp(T1->ptr[1]);
                             opn1.kind = ID; 
                             strcpy(opn1.id,symbolTable.symbols[T1->ptr[1]->place].alias);
+                            opn1.offset = symbolTable.symbols[T1->ptr[1]->place].offset;
                             result.kind = ID; 
                             strcpy(result.id,symbolTable.symbols[T1->place].alias);
+                            result.offset = symbolTable.symbols[T1->place].offset;
                             T->code = merge(3,T->code,T1->ptr[1]->code,genIR(ASSIGNOP,opn1,opn2,result));
                         }
                         //width是被的变量的长度，T1->ptr[1]->width是所赋值的长度
