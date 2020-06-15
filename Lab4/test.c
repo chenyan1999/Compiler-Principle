@@ -1,7 +1,3 @@
-int print(int a){
-    
-    return 0;
-}
 int fibo(int a) {
     int i, j;
     if(a == 1 || a == 2){
@@ -16,7 +12,7 @@ int main(){
 	int m, n, i;
     for (i = 1; i < 8; i ++){
         m = fibo(i);
-        print(m);
+        write(m);
     }
     // i = fibo(3);
     // print(i);

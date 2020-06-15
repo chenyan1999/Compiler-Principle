@@ -1,30 +1,24 @@
-# README about Lab 2
+# README about Lab 4
 
-## 新增的支持生成中间代码的语法
+## 新增函数 *objectCode()* 实现生成汇编代码
 
-* 基本表达式
-
-    1. **+=, -=, *=, /=** ：在 *prnIR()* 中新增 *case SELFPLUS,case SELFMINUS,case SELFSTAR,case SELFDIV * 的内容
-
-    2. **++, --** ：在 *prnIR()* 中新增 *case INC,case DEC* 的内容
-
-    3. **UMINUS/-** ：在 *prnIR()* 中新增 *case UMINUS*，在*Exp()* 中补充 *case UMINUS* 的内容
-
-    4. **RELOP** ：在*Exp()* 中补充了 *case RELOP* 的内容
-
-    5. **AND, OR, NOT** ：在 *Exp()* 中补充了 *case AND,case OR,case NOT* 的内容
-
-* 布尔表达式
-    1. **int, float, char**：在 *boolExp()* 中新增 *case INT,case FLOAT,case CHAR *的内容
-    2. **ID（变量）**：在 *boolExp()* 中新增 *case ID*  的内容
-    3. **ASSIGNOP** ：在 *boolExp()* 中新增 *case ASSIGNOP* 的内容
-    4. **+, -, *,  /**：在 *boolExp()* 中新增 *case PLUS,case MINUS,case STAR,case DIV* 的内容
-    5. **+=, -=, *=, /= ** ：在 *boolExp()* 中新增*case SELFPLUS,case SELFMINUS,case SELFSTAR,case SELFDIV* 的内容
-    6. **++, --** ：在 *boolExp()* 中新增 *case INC,case DEC* 的内容
-    7. **UMINUS/-** ：在*boolExp()* 中补充 *case UMINUS* 的内容
-* 语句类节点
-    1. **for** ：在*semantic_Analysis()* 中补充 *case FOR* 的内容
-    2. **break, continue** ：增加Ebreak和Econtinue。
+* 函数调用方式：
+    1. 在 *case ARG* 中对需要传递的变量压栈
+    2. 转跳至被调用函数（返回地址入$ra）
+* 非main函数进入方式：
+    1. 将返回地址（位于\$ra）压栈
+    2. 该函数起始\$sp位置相对于该函数栈底\$fp的偏移量压栈
+    3. 调用函数的\$fp压栈
+    4. \$fp移动到当前\$sp
+    5. \$sp根据 2. 中的偏移量移到函数起始\$sp位置
+    6. 把传入的形参送到对应偏移地址
+* 函数返回：
+    1. 返回值保存至\$v0
+    2. \$sp回到\$fp的位置
+    3. 取返回地址-8(\$fp)送入\$ra
+    4. \$fp回到调用函数的\$fp
+    5. 根据-4(\$fp)找到该函数的$sp起始位置
+* 默认的write()：该函数的汇编语言被直接写入每个汇编asm文件
 
 ## mini-c支持的内容（加粗内容为自定义内容）
 
@@ -36,7 +30,7 @@
     
     * **char**
     
-    * **任意维数的数组**，在变量声明中只支持常量长度的定长数组，只在表达式中支持数组内的表达式计算，如：
+    * ~~**任意维数的数组**，在变量声明中只支持常量长度的定长数组，只在表达式中支持数组内的表达式计算，如：~~
     
         ```c
         int x[5][2];

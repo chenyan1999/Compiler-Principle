@@ -183,13 +183,23 @@ void objectCode(struct codenode *head){
         return;
     }
     do{
-        // fprintf(fp,".globl main0\n");
         fprintf(fp,".text\n");
-        // fprintf(fp,"main0\n");
-        // fprintf(fp,"addi $sp,$sp,-main\n");
-        fprintf(fp,"jal main\n");
-        // fprintf(fp,"addi $v0,$0,10\n");
-        // fprintf(fp,"syscall\n\n");
+        fprintf(fp,"jal main\n\n");
+        fprintf(fp,"write:\naddi $t1, $0, 4#栈顶上升长度\n");
+        fprintf(fp,"add $sp, $sp,$t1#栈上升\nsw $ra,($sp)#返回地址入栈\n");
+        fprintf(fp,"add $sp, $sp,$t1#栈上升\naddi $t2, $0, 20#函数总offset\n");
+        fprintf(fp,"sw $t2,($sp)#返回地址入栈\nadd $sp, $sp,$t1#栈上升\n");
+        fprintf(fp,"sw $fp, ($sp)#调用函数基址保存\nmove $fp, $sp#$fp移动\n");
+        fprintf(fp,"add $sp, $sp,$t2#$sp上移\nlw $t1, -12($fp)#取形参\n");
+        fprintf(fp,"move $t3, $t1\nsw $t3, 12($fp)#传入对应位置\n");
+        fprintf(fp,"lw $t3, 12($fp)\nmove $a0, $t3\n");
+        fprintf(fp,"addi $v0, $0,1\nsyscall\n");
+        fprintf(fp,"addi $t3,$0,0\nsw $t3, 16($fp)\n");
+        fprintf(fp,"lw $v0, 16($fp)#存返回值\nmove $sp, $fp #$sp回退到$fp\n");
+        fprintf(fp,"lw $t2, -8($fp)#取返回地址\nmove $ra, $t2#送入$ra\n");
+        fprintf(fp,"lw $t1, ($fp)#读取调用函数的栈底\nmove $fp, $t1#回到栈底\n");
+        fprintf(fp,"lw $t1, -4($fp)\nadd $t1, $fp,$t1\n");
+        fprintf(fp,"move $sp, $t1\njr $ra\n\n");
     }while(0);
     do {
         if (h->opn1.kind==INT)
@@ -336,12 +346,12 @@ void objectCode(struct codenode *head){
                                 stored_param_offset += 4;
                                 new_param_offset += 4;
                             }
-                            if(!strcmp(h->result.id,"print")){
-                                fprintf(fp,"lw $t3, 12($fp)\n");
-                                fprintf(fp,"move $a0, $t3\n");
-                                fprintf(fp,"addi $v0, $0,1\n");
-                                fprintf(fp,"syscall\n");
-                            }
+                            // if(!strcmp(h->result.id,"print")){
+                            //     fprintf(fp,"lw $t3, 12($fp)\n");
+                            //     fprintf(fp,"move $a0, $t3\n");
+                            //     fprintf(fp,"addi $v0, $0,1\n");
+                            //     fprintf(fp,"syscall\n");
+                            // }
                             // printf("  %s := CALL %s\n",resultstr, opnstr1);
                             break;
             // case PARAM:     printf("  PARAM %s\n",h->result.id);
@@ -383,11 +393,7 @@ void objectCode(struct codenode *head){
                             fprintf(fp,"lw $t1, %d($fp)#取参数\n",h->result.offset);
                             fprintf(fp,"sw $t1, ($sp)#压栈\n");
                             break;
-            case CALL:      if (!strcmp(opnstr1,"write")){
-                                // printf("  CALL  %s\n", opnstr1);
-                                break;
-                            }
-                            fprintf(fp,"jal %s #转跳被调用函数\n",opnstr1);//保存地址后跳转
+            case CALL:      fprintf(fp,"jal %s #转跳被调用函数\n",opnstr1);//保存地址后跳转
                             //调用结束后
                             fprintf(fp,"sw $v0, %d($fp) #返回值存入\n",h->result.offset);
                             break;

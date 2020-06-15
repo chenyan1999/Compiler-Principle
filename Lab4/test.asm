@@ -1,7 +1,7 @@
 .text
 jal main
 
-print:
+write:
 addi $t1, $0, 4#栈顶上升长度
 add $sp, $sp,$t1#栈上升
 sw $ra,($sp)#返回地址入栈
@@ -31,7 +31,7 @@ lw $t1, -4($fp)
 add $t1, $fp,$t1
 move $sp, $t1
 jr $ra
-label1:
+
 
 fibo:
 addi $t1, $0, 4#栈顶上升长度
@@ -51,16 +51,16 @@ addi $t3,$0,1
 sw $t3, 24($fp)
 lw $t1, 12($fp)
 lw $t2, 24($fp)
-beq $t1,$t2, label4
-j label7
-label7:
+beq $t1,$t2, label3
+j label6
+label6:
 addi $t3,$0,2
 sw $t3, 28($fp)
 lw $t1, 12($fp)
 lw $t2, 28($fp)
-beq $t1,$t2, label4
-j label5
-label4:
+beq $t1,$t2, label3
+j label4
+label3:
 addi $t3,$0,1
 sw $t3, 32($fp)
 lw $v0, 32($fp)#存返回值
@@ -73,8 +73,8 @@ lw $t1, -4($fp)
 add $t1, $fp,$t1
 move $sp, $t1
 jr $ra
-j label6
-label5:
+j label5
+label4:
 addi $t3,$0,1
 sw $t3, 36($fp)
 lw $t1, 12($fp)
@@ -116,7 +116,7 @@ lw $t1, -4($fp)
 add $t1, $fp,$t1
 move $sp, $t1
 jr $ra
-label6:
+label5:
 lw $v0, 12($fp)#存返回值
 move $sp, $fp #$sp回退到$fp
 lw $t2, -8($fp)#取返回地址
@@ -127,7 +127,7 @@ lw $t1, -4($fp)
 add $t1, $fp,$t1
 move $sp, $t1
 jr $ra
-label2:
+label1:
 
 main:
 addi $t2, $0, 4#栈顶上升高度
@@ -140,14 +140,14 @@ sw $t3, 24($fp)
 lw $t1, 24($fp)
 move $t3, $t1
 sw $t3, 20($fp)
-label13:
+label12:
 addi $t3,$0,8
 sw $t3, 28($fp)
 lw $t1, 20($fp)
 lw $t2, 28($fp)
-blt $t1,$t2, label11
-j label10
-label11:
+blt $t1,$t2, label10
+j label9
+label10:
 addi $t1, $0, 4#栈顶提升高度
 add $sp, $sp,$t1#升栈顶
 lw $t1, 20($fp)#取参数
@@ -161,9 +161,9 @@ addi $t1, $0, 4#栈顶提升高度
 add $sp, $sp,$t1#升栈顶
 lw $t1, 12($fp)#取参数
 sw $t1, ($sp)#压栈
-jal print #转跳被调用函数
+jal write #转跳被调用函数
 sw $v0, 4($fp) #返回值存入
-label12:
+label11:
 lw $t1, 20($fp)
 addi $t2, $0,1
 add $t3, $t1,$t2
@@ -171,11 +171,11 @@ sw $t3, 20($fp)
 lw $t1, 20($fp)
 move $t3, $t1
 sw $t3, 32($fp)
-j label13
-label10:
+j label12
+label9:
 addi $t3,$0,1
 sw $t3, 44($fp)
-label9:
+label8:
 addi $v0,$0,10
 syscall
 

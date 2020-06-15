@@ -1,4 +1,4 @@
-# README about Lab 2
+# README about Lab 3
 
 ## 新增的支持生成中间代码的语法
 
